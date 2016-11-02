@@ -31,11 +31,8 @@
                     textBox.BackColor = Color.Red
                     canOrder = False
                     Exit For
-
                 End If
-
             End If
-
         Next
         counter -= 1
 
@@ -69,9 +66,19 @@
                 Next
 
             End If
-
         End If
-
-
     End Sub
+
+    Private Function getParsedDouble(textbox As TextBox)
+        If textbox.Text.Length = 0 Then
+            Return Nothing
+        End If
+        Dim number As Double
+        If Double.TryParse(textbox.Text, number) Then
+            Return number
+        Else
+            textbox.Focus()
+            Return Nothing
+        End If
+    End Function
 End Class
