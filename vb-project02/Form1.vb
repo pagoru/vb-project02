@@ -1,33 +1,77 @@
 ﻿Public Class Form1
 
-    Dim inputs() As TextBox = {
-        TextBox1, TextBox2, TextBox3, TextBox4,
-        TextBox5, TextBox6, TextBox7, TextBox8
-    }
+    Dim textBoxs() As TextBox
+
     Private Sub button_order_MouseUp(sender As Object, e As MouseEventArgs) Handles button_order.MouseUp
+        textBoxs = {
+            TextBox1, TextBox2, TextBox3, TextBox4,
+            TextBox5, TextBox6, TextBox7, TextBox8
+        }
+
         Dim orderedNumbers(8) As Double
-        If RadioButton_ASC.Checked Then
+        Dim canOrder As Boolean = True
+        Dim counter As Int64 = 0
 
-            For index As Integer = 0 To 7
+        For index As Integer = 0 To 7
 
-                Me.Text += CStr(index)
-                Dim currentInput As TextBox = inputs(index)
-                If currentInput.Text.Length > 0 Then
-                    Dim value As Double
-                    If Double.TryParse(currentInput.Text, value) Then
+            Dim textBox As TextBox = textBoxs(index)
+            Dim number As Int64
 
-                    Else
-                        currentInput.Focus()
-                        Exit For
-                    End If
+            textBox.BackColor = Color.White
+
+            If Double.TryParse(textBox.Text, number) Then
+
+                orderedNumbers(counter) = number
+                counter += 1
+
+            Else
+                If textBox.Text IsNot "" Then
+
+                    textBox.Focus()
+                    textBox.BackColor = Color.Red
+                    canOrder = False
+                    Exit For
 
                 End If
 
+            End If
+
+        Next
+        counter -= 1
+
+        If canOrder Then
+
+            Dim newNumbers(counter) As Double
+            For index As Integer = 0 To counter
+                newNumbers(index) = orderedNumbers(index)
             Next
 
-        Else
+            For index As Integer = 0 To 7
+                Dim textBox As TextBox = textBoxs(index)
+                textBox.Text = ""
+            Next
+
+            Array.Sort(newNumbers)
+            If RadioButton_ASC.Checked Then
+
+                For index As Integer = 0 To counter
+                    Dim textBox As TextBox = textBoxs(index)
+                    textBox.Text = newNumbers(index)
+                Next
+            Else
+                Array.Reverse(newNumbers)
+
+                Dim index2 As Integer = 0
+                For index As Integer = 7 - counter To 7
+                    Dim textBox As TextBox = textBoxs(index)
+                    textBox.Text = newNumbers(index2)
+                    index2 += 1
+                Next
+
+            End If
 
         End If
+
 
     End Sub
 End Class
